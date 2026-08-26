@@ -3,16 +3,22 @@ import * as THREE from "three"
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Sky, Clouds, Cloud, OrbitControls } from "@react-three/drei"
 // @ts-ignore
-import Grass from './Grass.jsx'
+import Grass from './components/Grass.jsx'
 // @ts-ignore
-import { Tree } from './Tree.jsx'
-import { WeatherClient } from './WeatherClient.ts'
-import { VisitorCounterClient } from './VisitorCounterClient.ts'
+import { Tree } from './components/Tree.jsx'
+import { WeatherClient } from './clients/WeatherClient.ts'
+import { VisitorCounterClient } from './clients/VisitorCounterClient.ts'
 import './App.css'
-import RainSystem from './RainSystem.tsx'
+import RainSystem from './components/RainSystem.tsx'
 
-function Loading() {
+function Loading({ onLoadingChange }: { onLoadingChange: (loading: boolean) => void }) {
   const meshRef = useRef<THREE.Mesh>(null)
+
+  useEffect(() => {
+    onLoadingChange(true)
+
+    return () => onLoadingChange(false)
+  }, [onLoadingChange])
 
   useFrame((_state, delta) => {
     if (!meshRef.current) return
@@ -76,9 +82,9 @@ function CameraRig() {
 function App() {
   const [count, setCount] = useState(0)
   const [rainCount, setRainCount] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    console.log("Fetching visitor count...")
     let visClient = new VisitorCounterClient()
     visClient.postVisitors().then((count: any) => {
       setCount(count)
@@ -98,7 +104,7 @@ function App() {
       <Canvas camera={{ position: [33.25, 5, -48.27] }}>
         <ambientLight intensity={Math.PI / 1.5} />
         <directionalLight position={[10, 10, 5]} castShadow intensity={1} />
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<Loading onLoadingChange={setIsLoading} />}>
           <CameraRig />
           <Sky distance={450000} sunPosition={[0, 1, 0]} inclination={0} azimuth={0.25} />
           <RainSystem count={rainCount} position={[33.25, 5, -48.27]} />
@@ -116,9 +122,11 @@ function App() {
         <OrbitControls />
       </Canvas>
 
-      <div id="floating-card" className="glass-card">
-        Hi there! You're the {count}th visitor.
-      </div>
+      {!isLoading && (
+        <div id="floating-card" className="glass-card">
+          Hi there! You're the {count}th visitor.
+        </div>
+      )}
     </>
   )
 }

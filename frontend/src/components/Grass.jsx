@@ -4,8 +4,8 @@ import React, { useRef, useMemo } from "react"
 import { createNoise2D } from "simplex-noise"
 import { useFrame, useLoader } from "@react-three/fiber"
 //These have been taken from "Realistic real-time grass rendering" by Eddie Lee, 2010
-import bladeDiffuse from "./assets/blade_diffuse.jpg"
-import bladeAlpha from "./assets/blade_alpha.jpg"
+import bladeDiffuse from "../assets/blade_diffuse.jpg"
+import bladeAlpha from "../assets/blade_alpha.jpg"
 import "./GrassMaterial"
 
 function mulberry32(a) {

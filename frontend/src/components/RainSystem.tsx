@@ -1,10 +1,10 @@
 import { useRef, useMemo } from "react"
 import * as THREE from 'three'
 import { shaderMaterial } from "@react-three/drei"
-import vertShader from './assets/rain.vert.glsl?raw'
-import fragShader from './assets/rain.frag.glsl?raw'
+import vertShader from '../assets/rain.vert.glsl?raw'
+import fragShader from '../assets/rain.frag.glsl?raw'
 import { extend, useFrame } from "@react-three/fiber"
-import rainDropUrl from './assets/rainDrop.png'
+import rainDropUrl from '../assets/rainDrop.png'
 
 const rainTexture = new THREE.TextureLoader().load(rainDropUrl)
 rainTexture.colorSpace = THREE.SRGBColorSpace
@@ -50,12 +50,12 @@ export default function RainSystem({
     }, [count, radius, height])
 
     const lastVerticalFacing = useRef(0)
+    const camDir = useRef(new THREE.Vector3())
     useFrame((state) => {
         materialRef.current.uniforms.uTime.value = state.clock.elapsedTime / 4
 
-        let camDir = new THREE.Vector3()
-        state.camera.getWorldDirection(camDir)
-        const verticalFacing = Math.abs(camDir.y)
+        state.camera.getWorldDirection(camDir.current)
+        const verticalFacing = Math.abs(camDir.current.y)
         if (Math.abs(verticalFacing - lastVerticalFacing.current) > 0.001) {
             lastVerticalFacing.current = verticalFacing
             const sizeScale = THREE.MathUtils.lerp(1, 0.7, verticalFacing)
