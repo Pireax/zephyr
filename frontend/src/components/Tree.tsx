@@ -1,14 +1,18 @@
 import { useRef } from 'react'
-import treeUrl from '../assets/ghibli_stylized_tree.glb'
+import treeUrl from '../assets/ghibli_stylized_tree.glb?no-inline'
 import { useGLTF } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, type ThreeElements } from '@react-three/fiber'
 import * as THREE from 'three'
 
-export function Tree({ windDirection = new THREE.Vector2(1, 1), ...props }) {
-  const { nodes, materials } = useGLTF(treeUrl)
-  const shaderRef = useRef(null)
+type TreeProps = ThreeElements['group'] & {
+  windDirection?: THREE.Vector2
+}
 
-  materials.Stylised_Foliage.onBeforeCompile = (shader) => {
+export function Tree({ windDirection = new THREE.Vector2(1, 1), ...props }: TreeProps) {
+  const { nodes, materials } = useGLTF(treeUrl) as any
+  const shaderRef = useRef<any>(null!)
+
+  materials.Stylised_Foliage.onBeforeCompile = (shader: any) => {
     shader.uniforms.time = { value: 0 }
     shader.uniforms.windDirection = { value: windDirection }
     shader.vertexShader = shader.vertexShader

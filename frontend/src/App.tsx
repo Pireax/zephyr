@@ -5,7 +5,7 @@ import { Sky, Clouds, Cloud, OrbitControls } from "@react-three/drei"
 // @ts-ignore
 import Grass from './components/Grass.jsx'
 // @ts-ignore
-import { Tree } from './components/Tree.jsx'
+import { Tree } from './components/Tree'
 import { WeatherClient } from './clients/WeatherClient.ts'
 import { VisitorCounterClient } from './clients/VisitorCounterClient.ts'
 import './App.css'
