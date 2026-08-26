@@ -12,9 +12,7 @@ builder.ConfigureFunctionsWebApplication();
 builder.Services.AddSingleton(sp =>
 {
     var connectionString = Environment.GetEnvironmentVariable("StorageConnection");
-    var serviceClient = new TableServiceClient(connectionString);
-    var client = serviceClient.GetTableClient("VisitorCounter");
-    //var client = new TableClient(connectionString, "VisitorCounter");
+    var client = new TableClient(connectionString, "VisitorCounter");
     var response = client.CreateIfNotExists();
     if (response.GetRawResponse().Status != 409)
         client.AddEntity(new VisitorCounter { Count = 0 });

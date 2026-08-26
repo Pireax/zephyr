@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using System.Collections;
 
 namespace Zephyr;
 
@@ -24,12 +23,6 @@ public class VisitorsFunction
     [Function("Visitors")]
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
     {
-        _logger.LogInformation("C# HTTP trigger function processed a request.");
-        foreach (DictionaryEntry e in System.Environment.GetEnvironmentVariables())
-        {
-            Console.WriteLine(e.Key + ":" + e.Value);
-        }
-
         switch (req.Method)
         {
             case "GET":
@@ -37,7 +30,6 @@ public class VisitorsFunction
                 return new OkObjectResult(response.Value.Count);
             case "POST":
                 var count = await IncrementVisitorCounter();
-                if (Environment.GetEnvironmentVariable("WEBSITE_SLOT_NAME") != "Production") return new OkObjectResult(99);
                 return new OkObjectResult(count );
             default:
                 return new BadRequestObjectResult("Unsupported HTTP method.");

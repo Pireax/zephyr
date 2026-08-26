@@ -1,7 +1,7 @@
 import { useRef, useState, Suspense, type ComponentProps, useEffect } from 'react'
 import * as THREE from "three"
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Sky, Clouds, Cloud, OrbitControls } from "@react-three/drei"
+import { Sky, Clouds, Cloud, OrbitControls, Billboard } from "@react-three/drei"
 // @ts-ignore
 import Grass from './components/Grass.jsx'
 // @ts-ignore
@@ -10,13 +10,18 @@ import { WeatherClient } from './clients/WeatherClient.ts'
 import { VisitorCounterClient } from './clients/VisitorCounterClient.ts'
 import './App.css'
 import RainSystem from './components/RainSystem.tsx'
+import { Text } from '@react-three/drei'
+
+const neverEndingLoad = new Promise<never>(() => {})
+
+function NeverEndingLoader(): never {
+  throw neverEndingLoad
+}
 
 function Loading({ onLoadingChange }: { onLoadingChange: (loading: boolean) => void }) {
   const meshRef = useRef<THREE.Mesh>(null)
 
   useEffect(() => {
-    onLoadingChange(true)
-
     return () => onLoadingChange(false)
   }, [onLoadingChange])
 
@@ -29,11 +34,20 @@ function Loading({ onLoadingChange }: { onLoadingChange: (loading: boolean) => v
     meshRef.current.scale.setScalar(scale)
   })
 
+  const fontProps = { fontSize: 2.5, letterSpacing: -0.05, lineHeight: 1, 'material-toneMapped': false }
+
   return (
-    <mesh ref={meshRef}>
-      <boxGeometry />
-      <meshNormalMaterial />
-    </mesh>
+    <group>
+      <mesh ref={meshRef}>
+        <boxGeometry />
+        <meshNormalMaterial />
+      </mesh>
+      <Billboard>
+        <Text color="white" position={[0, -10, 0]} {...fontProps}>
+          Loading
+        </Text>
+      </Billboard>
+    </group>
   )
 }
 
@@ -66,7 +80,7 @@ function MovingClouds({
 
   return (
     <group ref={cloudsRef} position={initialPosition}>
-         <Cloud color="#ffffff" growth={20} {...cloudProps} />
+      <Cloud color="#ffffff" growth={20} {...cloudProps} />
     </group>
   )
 }
@@ -79,6 +93,15 @@ function CameraRig() {
   })
 
   return null
+}
+
+function formatOrdinal(count: number) {
+  const lastTwoDigits = count % 100
+  const suffix = lastTwoDigits >= 11 && lastTwoDigits <= 13
+    ? 'th'
+    : ({ 1: 'st', 2: 'nd', 3: 'rd' } as Record<number, string>)[count % 10] ?? 'th'
+
+  return `${count}${suffix}`
 }
 
 function App() {
@@ -126,7 +149,7 @@ function App() {
 
       {!isLoading && (
         <div id="floating-card" className="glass-card">
-          Hi there! You're the {count}th visitor.
+          Hi there! You're the {formatOrdinal(count)} visitor.
         </div>
       )}
     </>
