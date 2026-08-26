@@ -1,9 +1,7 @@
-const defaultBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? '') + '/api'
-
 export abstract class BaseClient {
   private readonly baseUrl: string
 
-  constructor(baseUrl = defaultBaseUrl) {
+  constructor(baseUrl: string) {
     this.baseUrl = baseUrl.replace(/\/$/, '')
   }
 

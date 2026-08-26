@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
-namespace Zephyr;
+namespace Zephyr.Visitors;
 
 public class VisitorsFunction
 {
@@ -21,7 +21,7 @@ public class VisitorsFunction
     }
 
     [Function("Visitors")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequest req)
     {
         switch (req.Method)
         {

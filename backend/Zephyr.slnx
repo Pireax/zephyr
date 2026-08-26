@@ -1,3 +1,4 @@
 <Solution>
-  <Project Path="Zephyr.csproj" />
+  <Project Path="Zephyr.Visitors/Zephyr.Visitors.csproj" />
+  <Project Path="Zephyr.Weather/Zephyr.Weather.csproj" />
 </Solution>

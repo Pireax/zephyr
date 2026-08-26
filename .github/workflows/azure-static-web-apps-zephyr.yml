@@ -27,11 +27,14 @@ jobs:
         with:
           submodules: true
           lfs: false
+        
       - name: Login to Azure
         uses: azure/login@v3
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Deploy Infrastructure
+        id: deploy
         uses: azure/bicep-deploy@v2
         with:
           type: deployment
@@ -42,6 +45,19 @@ jobs:
           template-file: ./main.bicep
           parameters: |
             swaName: ${{ env.SWA_NAME }}
+        
+      - name: Set up .NET version
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 9.0.x
+      - name: Prepare Visitors API for deployment
+        run: dotnet publish ./backend/Zephyr.Visitors --configuration Release --output ./output
+      - name: Deploy Visitors Azure Function
+        uses: azure/functions-action@v1
+        with:
+          app-name: ${{ steps.deploy.outputs.functionAppName }}
+          package: ./output
+
       - name: Get SWA token
         id: swa
         run: |
@@ -63,9 +79,11 @@ jobs:
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "./frontend" # App source code path
-          api_location: "./backend" # Api source code path - optional
+          api_location: "./backend/Zephyr.Weather" # Api source code path - optional
           output_location: "dist" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
+        env:
+          VITE_VISITORS_API_BASE_URL: 'https://${{ steps.deploy.outputs.functionAppDomain }}'
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'

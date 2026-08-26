@@ -1,9 +1,11 @@
 import { BaseClient } from './BaseClient.ts'
 
+const defaultBaseUrl = (import.meta.env.VITE_VISITORS_API_BASE_URL ?? '') + '/api'
+
 export class VisitorCounterClient extends BaseClient {
   private readonly visitorsUrl: string
 
-  constructor(baseUrl?: string) {
+  constructor(baseUrl = defaultBaseUrl) {
     super(baseUrl)
     this.visitorsUrl = this.buildUrl('Visitors')
   }

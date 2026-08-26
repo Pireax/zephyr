@@ -120,7 +120,7 @@ function App() {
   return (
     <>
       <Canvas camera={{ position: [33.25, 5, -48.27] }}>
-        <ambientLight intensity={Math.PI / 1.5} />
+        <ambientLight intensity={Math.PI / 1.5  - (rainCount / 40000)} />
         <directionalLight position={[10, 10, 5]} castShadow intensity={1} />
         <Suspense fallback={<Loading onLoadingChange={setIsLoading} />}>
           <CameraRig />
@@ -141,9 +141,14 @@ function App() {
       </Canvas>
 
       {!isLoading && (
-        <div id="floating-card" className="glass-card">
+        <button
+          type="button"
+          id="floating-card"
+          className="glass-card"
+          onClick={() => setRainCount((currentCount) => currentCount === 40000 ? 0 : 40000)}
+        >
           Hi there! You're the {formatOrdinal(count)} visitor.
-        </div>
+        </button>
       )}
     </>
   )

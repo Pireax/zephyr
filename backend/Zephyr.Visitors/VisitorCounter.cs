@@ -1,7 +1,7 @@
 ﻿using Azure;
 using Azure.Data.Tables;
 
-namespace Zephyr;
+namespace Zephyr.Visitors;
 
 internal class VisitorCounter : ITableEntity
 {

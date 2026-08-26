@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Zephyr": {
+    "Zephyr.Visitors": {
       "commandName": "Project",
       "commandLineArgs": "--port 7160",
       "environmentVariables": {
