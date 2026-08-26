@@ -1,7 +1,7 @@
 import { useRef, useState, Suspense, type ComponentProps, useEffect } from 'react'
 import * as THREE from "three"
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Sky, Clouds, Cloud, OrbitControls, Billboard } from "@react-three/drei"
+import { Sky, Clouds, Cloud, OrbitControls, Billboard, Text } from "@react-three/drei"
 // @ts-ignore
 import Grass from './components/Grass.jsx'
 // @ts-ignore
@@ -10,13 +10,6 @@ import { WeatherClient } from './clients/WeatherClient.ts'
 import { VisitorCounterClient } from './clients/VisitorCounterClient.ts'
 import './App.css'
 import RainSystem from './components/RainSystem.tsx'
-import { Text } from '@react-three/drei'
-
-const neverEndingLoad = new Promise<never>(() => {})
-
-function NeverEndingLoader(): never {
-  throw neverEndingLoad
-}
 
 function Loading({ onLoadingChange }: { onLoadingChange: (loading: boolean) => void }) {
   const meshRef = useRef<THREE.Mesh>(null)

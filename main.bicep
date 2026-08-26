@@ -1,3 +1,6 @@
+@description('Static web app name')
+param swaName string = 'Zephyr'
+
 @description('Location for all resources.')
 param location string = resourceGroup().location
 
@@ -11,7 +14,7 @@ resource storage 'Microsoft.Storage/storageAccounts@2025-01-01' = {
 }
 
 resource staticWebApp 'Microsoft.Web/staticSites@2025-03-01' = {
-  name: 'Zephyr'
+  name: swaName
   location: location
   sku: {
     name: 'Free'
