@@ -1,4 +1,4 @@
-const defaultBaseUrl = '/api'
+const defaultBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? '') + '/api'
 
 export class VisitorCounterClient {
   private readonly visitorsUrl: string

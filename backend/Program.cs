@@ -21,6 +21,8 @@ builder.Services.AddSingleton(sp =>
     return client;
 });
 
+builder.Services.AddHttpClient();
+
 builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
