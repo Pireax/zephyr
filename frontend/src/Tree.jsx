@@ -1,6 +1,5 @@
 import { useRef } from 'react'
-import treeUrl from './assets/tree.gltf'
-import './assets/tree.bin'
+import treeUrl from '/tree.gltf'
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
