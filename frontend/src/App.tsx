@@ -2,31 +2,12 @@ import { useRef, useState, Suspense, type ComponentProps, useEffect } from 'reac
 import * as THREE from "three"
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Sky, Clouds, Cloud, OrbitControls } from "@react-three/drei"
+// @ts-ignore
 import Grass from './Grass.jsx'
+// @ts-ignore
 import { Tree } from './Tree.jsx'
 import { VisitorCounterClient } from './VisitorCounterClient.ts'
 import './App.css'
-
-function Box(props: any) {
-  const meshRef = useRef(null)
-  const [hovered, setHover] = useState(false)
-  const [active, setActive] = useState(false)
-
-  useFrame((state, delta) => (meshRef.current.rotation.x += delta))
-
-  return (
-    <mesh
-      {...props}
-      ref={meshRef}
-      scale={active ? 1.5 : 1}
-      onClick={(event) => setActive(!active)}
-      onPointerOver={(event) => setHover(true)}
-      onPointerOut={(event) => setHover(false)}>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
-      </mesh>
-  )
-}
 
 function MovingClouds({
   windDirection,
@@ -79,9 +60,7 @@ function App() {
     console.log("Fetching visitor count...")
     let client = new VisitorCounterClient()
     client.postVisitors().then((count: any) => {
-      client.getVisitors().then((count: any) => {
-        setCount(count)
-      })
+      setCount(count)
     })
   }, [])
 

@@ -11,7 +11,7 @@ export class VisitorCounterClient {
     return this.request<TResponse>({ method: 'GET', signal })
   }
 
-  postVisitors<TRequest = unknown, TResponse = unknown>(
+  postVisitors<TResponse = unknown>(
     signal?: AbortSignal,
   ): Promise<TResponse> {
     return this.request<TResponse>({
