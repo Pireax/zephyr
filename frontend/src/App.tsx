@@ -25,6 +25,7 @@ function Loading({ onLoadingChange }: { onLoadingChange: (loading: boolean) => v
 
     meshRef.current.rotation.x += delta
     meshRef.current.rotation.y += delta
+    meshRef.current.scale.multiplyScalar(1 + 1 * delta)
   })
 
   return (
