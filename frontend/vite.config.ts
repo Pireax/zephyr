@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  assetsInclude: ['**/*.gltf', '**/*.bin', '**/*.glb'],
+  assetsInclude: ['**/*.gltf', '**/*.bin'],
   plugins: [
     react(),
     babel({ presets: [reactCompilerPreset()] })

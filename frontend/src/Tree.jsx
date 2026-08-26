@@ -1,11 +1,12 @@
-import React, { useRef } from 'react'
-import treeJoined from './assets/tree.gltf'
+import { useRef } from 'react'
+import treeUrl from './assets/tree.gltf'
+import './assets/tree.bin'
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
 export function Tree({ windDirection = new THREE.Vector2(1, 1), ...props }) {
-  const { nodes, materials } = useGLTF(treeJoined)
+  const { nodes, materials } = useGLTF(treeUrl)
   const shaderRef = useRef(null)
 
   materials.Stylised_Foliage.onBeforeCompile = (shader) => {
@@ -216,4 +217,4 @@ export function Tree({ windDirection = new THREE.Vector2(1, 1), ...props }) {
   )
 }
 
-useGLTF.preload('/scene.gltf')
+useGLTF.preload(treeUrl)

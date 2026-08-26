@@ -1,4 +1,4 @@
-const defaultBaseUrl = 'http://localhost:7160/api'
+const defaultBaseUrl = '/api'
 
 export class VisitorCounterClient {
   private readonly visitorsUrl: string
