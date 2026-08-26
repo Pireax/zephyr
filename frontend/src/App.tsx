@@ -20,12 +20,13 @@ function Loading({ onLoadingChange }: { onLoadingChange: (loading: boolean) => v
     return () => onLoadingChange(false)
   }, [onLoadingChange])
 
-  useFrame((_state, delta) => {
+  useFrame((state, delta) => {
     if (!meshRef.current) return
 
     meshRef.current.rotation.x += delta
     meshRef.current.rotation.y += delta
-    meshRef.current.scale.multiplyScalar(1 + 1 * delta)
+    const scale = 5 + 0.5 * Math.sin(state.clock.elapsedTime * 2)
+    meshRef.current.scale.setScalar(scale)
   })
 
   return (
