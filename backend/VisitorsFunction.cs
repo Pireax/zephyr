@@ -37,6 +37,7 @@ public class VisitorsFunction
                 return new OkObjectResult(response.Value.Count);
             case "POST":
                 var count = await IncrementVisitorCounter();
+                if (Environment.GetEnvironmentVariable("WEBSITE_SLOT_NAME") != "Production") return new OkObjectResult(99);
                 return new OkObjectResult(count );
             default:
                 return new BadRequestObjectResult("Unsupported HTTP method.");
