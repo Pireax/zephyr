@@ -1,14 +1,11 @@
 import * as THREE from 'three'
 import { useRef } from 'react'
-import { useFrame, type ThreeElements } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
+// Model from https://skfb.ly/6Vsnu
 import treeUrl from '../assets/ghibli_stylized_tree.glb?no-inline'
 
-type TreeProps = ThreeElements['group'] & {
-  windDirection?: THREE.Vector2
-}
-
-export function Tree({ windDirection = new THREE.Vector2(1, 1), ...props }: TreeProps) {
+export function Tree({ windDirection = new THREE.Vector2(1, 1), ...props }) {
   const { nodes, materials } = useGLTF(treeUrl) as any
   const shaderRef = useRef<any>(null!)
 

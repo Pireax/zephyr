@@ -1,7 +1,7 @@
 import * as THREE from "three"
 import { useRef, useState, Suspense, type ComponentProps, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Sky, Clouds, Cloud, OrbitControls, Billboard, Text } from "@react-three/drei"
+import { Sky, Clouds, Cloud, Billboard, Text } from "@react-three/drei"
 import Grass from './components/Grass.tsx'
 import { Tree } from './components/Tree.tsx'
 import RainSystem from './components/RainSystem.tsx'
@@ -42,7 +42,7 @@ function Loading({ onLoadingChange }: { onLoadingChange: (loading: boolean) => v
   )
 }
 
-function MovingClouds({
+function MovingCloud({
   windDirection,
   initialPosition,
   driftDistance = 500,
@@ -127,15 +127,14 @@ function App() {
           <Grass windDirection={windDirection} />
           <Tree position={[-20, 16.5, 10]} scale={0.01} windDirection={windDirection} />
           <Clouds position={[-80, 0, -80]}>
-            <MovingClouds windDirection={windDirection} startingProgress={0.3} initialPosition={new THREE.Vector3(0, 40, 40)} bounds={[20, 5, 30]} growth={30}/>
-            <MovingClouds windDirection={windDirection} initialPosition={new THREE.Vector3(-18, 45, 12)} bounds={[10, 10, 40]} growth={20} />
-            <MovingClouds windDirection={windDirection} initialPosition={new THREE.Vector3(-80, 50, -16)} bounds={[8, 8, 20]} growth={10} />
-            <MovingClouds windDirection={windDirection} initialPosition={new THREE.Vector3(-100, 50, -40)} bounds={[16, 15, 20]} growth={15} />
-            <MovingClouds windDirection={windDirection} startingProgress={0.9} initialPosition={new THREE.Vector3(-90, 50, -20)} bounds={[8, 10, 20]} growth={10} />
-            <MovingClouds windDirection={windDirection} initialPosition={new THREE.Vector3(-60, 60, -40)} bounds={[8, 4, 20]} growth={30} />
+            <MovingCloud windDirection={windDirection} startingProgress={0.3} initialPosition={new THREE.Vector3(0, 40, 40)} bounds={[20, 5, 30]} growth={30}/>
+            <MovingCloud windDirection={windDirection} initialPosition={new THREE.Vector3(-18, 45, 12)} bounds={[10, 10, 40]} growth={20} />
+            <MovingCloud windDirection={windDirection} initialPosition={new THREE.Vector3(-80, 50, -16)} bounds={[8, 8, 20]} growth={10} />
+            <MovingCloud windDirection={windDirection} initialPosition={new THREE.Vector3(-100, 50, -40)} bounds={[16, 15, 20]} growth={15} />
+            <MovingCloud windDirection={windDirection} startingProgress={0.9} initialPosition={new THREE.Vector3(-90, 50, -20)} bounds={[8, 10, 20]} growth={10} />
+            <MovingCloud windDirection={windDirection} initialPosition={new THREE.Vector3(-60, 60, -40)} bounds={[8, 4, 20]} growth={30} />
           </Clouds>
         </Suspense>
-        <OrbitControls />
       </Canvas>
 
       {!isLoading && (

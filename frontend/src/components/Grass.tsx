@@ -1,4 +1,4 @@
-// Based on https://codepen.io/al-ro/pen/jJJygQ by al-ro, but rewritten in react-three-fiber
+// Based on https://codesandbox.io/p/sandbox/grass-shader-forked-okub75
 import * as THREE from "three"
 import { createNoise2D } from "simplex-noise"
 import { useRef, useMemo } from "react"
@@ -6,8 +6,6 @@ import { extend, useFrame, useLoader } from "@react-three/fiber"
 import { shaderMaterial } from "@react-three/drei"
 import vertShader from '../assets/grass.vert.glsl?raw'
 import fragShader from '../assets/grass.frag.glsl?raw'
-
-//These have been taken from "Realistic real-time grass rendering" by Eddie Lee, 2010
 import bladeDiffuse from "../assets/blade_diffuse.jpg"
 import bladeAlpha from "../assets/blade_alpha.jpg"
 

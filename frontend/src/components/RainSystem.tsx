@@ -1,17 +1,15 @@
+// Based on https://github.com/fromtheghost/rain-demo
 import * as THREE from 'three'
 import { useRef, useMemo } from "react"
 import { extend, useFrame } from "@react-three/fiber"
-import { shaderMaterial } from "@react-three/drei"
+import { shaderMaterial, useTexture } from "@react-three/drei"
 import rainDropUrl from '../assets/rainDrop.png'
 import vertShader from '../assets/rain.vert.glsl?raw'
 import fragShader from '../assets/rain.frag.glsl?raw'
 
-const rainTexture = new THREE.TextureLoader().load(rainDropUrl)
-rainTexture.colorSpace = THREE.SRGBColorSpace
-
 const RainMaterialDef = shaderMaterial({
     uTime: 0,
-    uTexture: rainTexture,
+    uTexture: useTexture(rainDropUrl, t => t.colorSpace = THREE.SRGBColorSpace),
     uSize: 5,
     uOpacity: 1,
     uOverallSpeed: 40,
