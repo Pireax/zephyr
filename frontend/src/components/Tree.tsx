@@ -1,8 +1,8 @@
-import { useRef } from 'react'
-import treeUrl from '../assets/ghibli_stylized_tree.glb?no-inline'
-import { useGLTF } from '@react-three/drei'
-import { useFrame, type ThreeElements } from '@react-three/fiber'
 import * as THREE from 'three'
+import { useRef } from 'react'
+import { useFrame, type ThreeElements } from '@react-three/fiber'
+import { useGLTF } from '@react-three/drei'
+import treeUrl from '../assets/ghibli_stylized_tree.glb?no-inline'
 
 type TreeProps = ThreeElements['group'] & {
   windDirection?: THREE.Vector2

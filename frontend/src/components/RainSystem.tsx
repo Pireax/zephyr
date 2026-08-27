@@ -1,10 +1,10 @@
-import { useRef, useMemo } from "react"
 import * as THREE from 'three'
+import { useRef, useMemo } from "react"
+import { extend, useFrame } from "@react-three/fiber"
 import { shaderMaterial } from "@react-three/drei"
+import rainDropUrl from '../assets/rainDrop.png'
 import vertShader from '../assets/rain.vert.glsl?raw'
 import fragShader from '../assets/rain.frag.glsl?raw'
-import { extend, useFrame } from "@react-three/fiber"
-import rainDropUrl from '../assets/rainDrop.png'
 
 const rainTexture = new THREE.TextureLoader().load(rainDropUrl)
 rainTexture.colorSpace = THREE.SRGBColorSpace

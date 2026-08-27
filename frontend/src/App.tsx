@@ -1,15 +1,13 @@
-import { useRef, useState, Suspense, type ComponentProps, useEffect } from 'react'
 import * as THREE from "three"
+import { useRef, useState, Suspense, type ComponentProps, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Sky, Clouds, Cloud, OrbitControls, Billboard, Text } from "@react-three/drei"
-// @ts-ignore
-import Grass from './components/Grass.jsx'
-// @ts-ignore
-import { Tree } from './components/Tree'
+import Grass from './components/Grass.tsx'
+import { Tree } from './components/Tree.tsx'
+import RainSystem from './components/RainSystem.tsx'
 import { WeatherClient } from './clients/WeatherClient.ts'
 import { VisitorCounterClient } from './clients/VisitorCounterClient.ts'
 import './App.css'
-import RainSystem from './components/RainSystem.tsx'
 
 function Loading({ onLoadingChange }: { onLoadingChange: (loading: boolean) => void }) {
   const meshRef = useRef<THREE.Mesh>(null)
@@ -121,7 +119,7 @@ function App() {
     <>
       <Canvas camera={{ position: [33.25, 5, -48.27] }}>
         <ambientLight intensity={Math.PI / 1.5  - (rainCount / 40000)} />
-        <directionalLight position={[10, 10, 5]} castShadow intensity={1} />
+        <directionalLight position={[10, 10, 5]} intensity={1} />
         <Suspense fallback={<Loading onLoadingChange={setIsLoading} />}>
           <CameraRig />
           <Sky distance={450000} sunPosition={[0, 1, 0]} inclination={0} azimuth={0.25} />
