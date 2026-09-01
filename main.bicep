@@ -1,11 +1,13 @@
 @description('Static web app name')
 param swaName string = 'Zephyr'
 
-@description('Azure Function App name')
-param functionAppName string = 'zephyr-api-${uniqueString(resourceGroup().id)}'
+@description('Environment for the function app')
+param functionAppEnvironment string = 'prod'
 
 @description('Location for all resources.')
 param location string = resourceGroup().location
+
+var functionAppName string = 'zephyr-api-${functionAppEnvironment}-${uniqueString(resourceGroup().id)}'
 
 resource storage 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   name: 'zephyrsa${uniqueString(resourceGroup().id)}'
@@ -56,6 +58,9 @@ resource functionApp 'Microsoft.Web/sites@2025-03-01' = {
   name: functionAppName
   location: location
   kind: 'functionapp,linux'
+  tags: {
+    environment: functionAppEnvironment
+  }
   identity: {
     type: 'SystemAssigned'
   }

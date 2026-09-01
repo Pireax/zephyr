@@ -45,6 +45,7 @@ jobs:
           template-file: ./main.bicep
           parameters: |
             swaName: ${{ env.SWA_NAME }}
+            functionAppEnvironment: ${{ github.event.pull_request.number || 'prod' }}
         
       - name: Set up .NET version
         uses: actions/setup-dotnet@v5
@@ -111,3 +112,16 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ steps.swa.outputs.token }}
           action: "close"
+      - name: Remove Azure Function App
+        run: |
+          FUNCTION_APP_NAME=$(az functionapp list \
+            --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
+            --query "[?tags.environment=='${{ github.event.pull_request.number }}'].name | [0]" \
+            --output tsv)
+          if [ -n "$FUNCTION_APP_NAME" ]; then
+            az functionapp delete \
+              --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
+              --name $FUNCTION_APP_NAME
+          else
+            echo "No Azure Function App found for this pull request."
+          fi
