@@ -20,6 +20,8 @@ const RainMaterialDef = shaderMaterial({
     uUvSquash: 1,
     uIntensity: 1,
     uHeight: 15,
+    uPosition: new THREE.Vector3(),
+    windDirection: new THREE.Vector2(1, 1),
 }, vertShader, fragShader)
 const RainMaterial = extend(RainMaterialDef)
 
@@ -27,6 +29,8 @@ export default function RainSystem({
     count = 40000,
     radius = 20,
     height = 15,
+    position = [0, 0, 0] as [number, number, number],
+    windDirection = new THREE.Vector2(1, 1),
     ...props
 }) {
     const materialRef = useRef<any>(null!)
@@ -54,6 +58,7 @@ export default function RainSystem({
     const camDir = useRef(new THREE.Vector3())
     useFrame((state) => {
         materialRef.current.uniforms.uTime.value = state.clock.elapsedTime / 4
+        materialRef.current.uniforms.uPosition.value.set(position[0], position[1], position[2])
 
         state.camera.getWorldDirection(camDir.current)
         const verticalFacing = Math.abs(camDir.current.y)
@@ -68,9 +73,9 @@ export default function RainSystem({
     })
 
     return (
-        <group {...props}>
+        <group position={position} {...props}>
             <points geometry={geo} frustumCulled={false}>
-                <RainMaterial ref={materialRef} depthWrite={false} transparent blending={THREE.NormalBlending} />
+                <RainMaterial ref={materialRef} windDirection={windDirection} depthWrite={false} transparent blending={THREE.NormalBlending} />
             </points>
         </group>
     )
