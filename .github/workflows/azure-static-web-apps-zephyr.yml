@@ -45,7 +45,7 @@ jobs:
           template-file: ./main.bicep
           parameters: |
             swaName: ${{ env.SWA_NAME }}
-            functionAppEnvironment: ${{ github.event.pull_request.number || 'prod' }}
+            functionAppEnvironment: "${{ github.event.pull_request.number || 'prod' }}"
         
       - name: Set up .NET version
         uses: actions/setup-dotnet@v5
