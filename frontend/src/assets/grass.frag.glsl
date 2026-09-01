@@ -6,6 +6,9 @@ uniform vec3 bottomColor;
 varying vec2 vUv;
 varying float frc;
 
+// We use only ambient lighting.
+uniform vec3 ambientLightColor;
+
 void main() {
   //Get transparency information from alpha map
   float alpha = texture2D(alphaMap, vUv).r;
@@ -17,6 +20,7 @@ void main() {
   col = mix(vec4(tipColor, 1.0), col, frc);
   //Add a shadow towards root
   col = mix(vec4(bottomColor, 1.0), col, frc);
+  col.rgb *= ambientLightColor;
   gl_FragColor = col;
 
   #include <tonemapping_fragment>

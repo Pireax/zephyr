@@ -21,6 +21,7 @@ const simplex = createNoise2D(mulberry32(125456789))
 
 const GrassMaterialDef = shaderMaterial(
   {
+    ...THREE.UniformsLib.lights as any,
     bladeHeight: 1,
     map: null as THREE.Texture | null,
     alphaMap: null as THREE.Texture | null,
@@ -32,6 +33,7 @@ const GrassMaterialDef = shaderMaterial(
   }, vertShader, fragShader,
   (self) => {
     self!.side = THREE.DoubleSide
+    self!.lights = true
   },
 )
 const GrassMaterial = extend(GrassMaterialDef)
