@@ -128,7 +128,7 @@ function App() {
   return (
     <>
       <Canvas camera={{ position: [33.25, 5, -48.27] }}>
-        <ambientLight intensity={Math.max(0.015, 0.015 + sunHeight * 1.85 - (rainCount / maxRainCount))} />
+        <ambientLight intensity={Math.max(0.015, 0.015 + sunHeight * 1.85 - 0.15 * (rainCount / maxRainCount))} />
         <directionalLight position={sunPosition} intensity={0.2 + sunHeight * 0.8} />
         <Suspense fallback={<Loading onLoadingChange={setIsLoading} />}>
           <CameraRig />
