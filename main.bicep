@@ -1,15 +1,20 @@
 @description('Static web app name')
 param swaName string = 'Zephyr'
 
-@description('Azure Function App name')
-param functionAppName string = 'zephyr-api-${uniqueString(resourceGroup().id)}'
+@description('Environment for the function app')
+param functionAppEnvironment string = 'prod'
 
 @description('Location for all resources.')
 param location string = resourceGroup().location
 
+var functionAppName string = 'zephyr-api-${functionAppEnvironment}-${uniqueString(resourceGroup().id)}'
+
 resource storage 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   name: 'zephyrsa${uniqueString(resourceGroup().id)}'
   location: location
+  tags: {
+    role: 'functionapp-storage'
+  }
   sku: {
     name: 'Standard_LRS'
   }
@@ -36,11 +41,11 @@ resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2025-01-01'
 
 resource deploymentContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2025-01-01' = {
   parent: blobService
-  name: 'function-deployments'
+  name: 'zephyr-function-deployments-${functionAppEnvironment}'
 }
 
 resource functionPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
-  name: 'zephyr-flex-plan-${uniqueString(resourceGroup().id)}'
+  name: 'zephyr-flex-plan-${functionAppEnvironment}'
   location: location
   kind: 'functionapp'
   sku: {
@@ -56,6 +61,9 @@ resource functionApp 'Microsoft.Web/sites@2025-03-01' = {
   name: functionAppName
   location: location
   kind: 'functionapp,linux'
+  tags: {
+    environment: functionAppEnvironment
+  }
   identity: {
     type: 'SystemAssigned'
   }
@@ -66,7 +74,7 @@ resource functionApp 'Microsoft.Web/sites@2025-03-01' = {
       deployment: {
         storage: {
           type: 'blobContainer'
-          value: '${storage.properties.primaryEndpoints.blob}function-deployments'
+          value: '${storage.properties.primaryEndpoints.blob}${deploymentContainer.name}'
           authentication: {
             type: 'SystemAssignedIdentity'
           }

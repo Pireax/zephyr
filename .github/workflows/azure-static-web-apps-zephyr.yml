@@ -45,6 +45,7 @@ jobs:
           template-file: ./main.bicep
           parameters: |
             swaName: ${{ env.SWA_NAME }}
+            functionAppEnvironment: "${{ github.event.pull_request.number || 'prod' }}"
         
       - name: Set up .NET version
         uses: actions/setup-dotnet@v5
@@ -111,3 +112,26 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ steps.swa.outputs.token }}
           action: "close"
+      - name: Remove Azure Function App
+        run: |
+          FUNCTION_APP_NAME=$(az functionapp list \
+            --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
+            --query "[?tags.environment=='${{ github.event.pull_request.number }}'].name" \
+            --output tsv)
+          az functionapp delete \
+            --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
+            --name $FUNCTION_APP_NAME
+
+          az functionapp plan delete \
+            --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
+            --name "zephyr-flex-plan-${{ github.event.pull_request.number }}"
+            --yes
+
+          STORAGE_ACCOUNT=$(az storage account list \
+            --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
+            --query "[?tags.role=='functionapp-storage'].name" \
+            --output tsv)
+          az storage container delete \
+            --account-name $STORAGE_ACCOUNT \
+            --name "zephyr-function-deployments-${{ github.event.pull_request.number }}" \
+            --auth-mode login
